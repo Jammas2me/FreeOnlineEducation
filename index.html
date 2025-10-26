@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Online Education</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #eef2f3;
+    cursor: url('your-cursor-image.png'), auto;
+  }
+
+  .login-container, .main-content {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+  }
+
+  .login-container.active {
+    display: flex;
+  }
+
+  .main-content.active {
+    display: block;
+    padding: 20px;
+  }
+
+  input[type="password"] {
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+
+  .navbar {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    background: #007acc;
+    padding: 10px;
+  }
+
+  .navbar img {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: transform 0.2s;
+  }
+
+  .navbar img:hover {
+    transform: scale(1.1);
+  }
+
+  .slider {
+    display: flex;
+    overflow: hidden;
+    width: 80%;
+    margin: 20px auto;
+    border-radius: 10px;
+  }
+
+  .slider img {
+    width: 100%;
+    animation: slide 10s infinite;
+  }
+
+  @keyframes slide {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-100%); }
+    50% { transform: translateX(-200%); }
+    75% { transform: translateX(-300%); }
+    100% { transform: translateX(0); }
+  }
+
+  .games {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .game {
+    width: 150px;
+    background: #fff;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 10px;
+  }
+
+  .game img {
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  .star {
+    font-size: 24px;
+    color: gold;
+    cursor: pointer;
+  }
+
+  .section-title {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<!-- Login Screen -->
+<div class="login-container active" id="loginContainer">
+  <h1>Welcome to Free Online Education</h1>
+  <p>Enter Password to Access:</p>
+  <input type="password" id="passwordInput" placeholder="Enter Password">
+  <button onclick="checkPassword()">Login</button>
+</div>
+
+<!-- Main Content -->
+<div class="main-content" id="mainContent">
+  <div class="navbar">
+    <img src="games.png" alt="Games" onclick="showSection('gamesSection')">
+    <img src="request.png" alt="Request" onclick="alert('Request feature coming soon!')">
+    <img src="support.png" alt="Support" onclick="alert('Support form coming soon!')">
+    <img src="shop.png" alt="Shop" onclick="alert('Shop page coming soon!')">
+    <img src="updates.png" alt="Updates" onclick="alert('See new updates soon!')">
+    <img src="comingsoon.png" alt="Coming Soon" onclick="alert('Upcoming games listed soon!')">
+  </div>
+
+  <div class="slider">
+    <img src="game1.jpg" alt="Game 1">
+    <img src="game2.jpg" alt="Game 2">
+    <img src="game3.jpg" alt="Game 3">
+    <img src="game4.jpg" alt="Game 4">
+  </div>
+
+  <div id="gamesSection">
+    <div class="section-title">All Games</div>
+    <div class="games" id="gameList"></div>
+  </div>
+</div>
+
+<script>
+  // Password login
+  function checkPassword() {
+    const pass = document.getElementById('passwordInput').value;
+    if (pass === 'Omgd') {
+      document.getElementById('loginContainer').classList.remove('active');
+      document.getElementById('mainContent').classList.add('active');
+    } else {
+      alert('Incorrect Password');
+    }
+  }
+
+  // Example game list
+  const games = [
+    { id: 1, name: "Math Quest", img: "math.jpg" },
+    { id: 2, name: "Science Explorer", img: "science.jpg" },
+    { id: 3, name: "History Hunt", img: "history.jpg" },
+    { id: 4, name: "Word Wizard", img: "word.jpg" }
+  ];
+
+  const gameList = document.getElementById('gameList');
+  const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+  function renderGames() {
+    gameList.innerHTML = "";
+    games.forEach(game => {
+      const div = document.createElement('div');
+      div.classList.add('game');
+      const isFav = favorites.includes(game.id);
+      div.innerHTML = `
+        <img src="${game.img}" alt="${game.name}">
+        <h3>${game.name}</h3>
+        <span class="star" onclick="toggleFavorite(${game.id})">${isFav ? '⭐' : '☆'}</span>
+      `;
+      gameList.appendChild(div);
+    });
+  }
+
+  function toggleFavorite(id) {
+    const index = favorites.indexOf(id);
+    if (index > -1) favorites.splice(index, 1);
+    else favorites.push(id);
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    renderGames();
+  }
+
+  renderGames();
+</script>
+
+</body>
+</html>
